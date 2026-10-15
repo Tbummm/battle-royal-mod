@@ -1,0 +1,97 @@
+GenericEntity {
+ ID "6B12F0A1C3D40001"
+ components {
+  MeshObject "{6B12F0A1C3D40002}" {
+   Object "{7DB692301E3A7527}Assets/Vehicles/C130J/C130J.xob"
+  }
+  SlotManagerComponent "{6B12F0A1C3D40003}" {
+   Slots {
+    EntitySlotInfo C130J_Prop_0_0 {
+     Offset -5.2632 3.7938 5.7944
+     Angles 0 0 0
+     Prefab "{7DB62E6BC4693231}Prefabs/Vehicles/C130J/Parts/C130J_Prop_0.et"
+    }
+    EntitySlotInfo C130J_Prop_1_0 {
+     Offset 5.2632 3.7938 5.7944
+     Angles 0 0 0
+     Prefab "{7DB639BEF3B5918E}Prefabs/Vehicles/C130J/Parts/C130J_Prop_1.et"
+    }
+    EntitySlotInfo C130J_Prop_2_0 {
+     Offset -10.5185 3.7938 5.8608
+     Angles 0 0 0
+     Prefab "{7DB6B1742FF03077}Prefabs/Vehicles/C130J/Parts/C130J_Prop_2.et"
+    }
+    EntitySlotInfo C130J_Prop_3_0 {
+     Offset 10.5185 3.7938 5.8608
+     Angles 0 0 0
+     Prefab "{7DB64A7CFABD0D8C}Prefabs/Vehicles/C130J/Parts/C130J_Prop_3.et"
+    }
+    EntitySlotInfo C130J_GearDoor_0_0 {
+     Offset 2.6303 1.3452 0.8543
+     Angles 0 0 0
+     Prefab "{7DB619BC612A8359}Prefabs/Vehicles/C130J/Parts/C130J_GearDoor_0.et"
+    }
+    EntitySlotInfo C130J_GearDoor_1_0 {
+     Offset -2.6303 1.3452 0.8543
+     Angles 0 0 0
+     Prefab "{7DB6586C0CF21FBF}Prefabs/Vehicles/C130J/Parts/C130J_GearDoor_1.et"
+    }
+    EntitySlotInfo C130J_GearDoor_2_0 {
+     Offset 0.5092 0.7947 11.3101
+     Angles 0 0 0
+     Prefab "{7DB6ECEEB97B52BE}Prefabs/Vehicles/C130J/Parts/C130J_GearDoor_2.et"
+    }
+    EntitySlotInfo C130J_GearDoor_3_0 {
+     Offset -0.5092 0.7947 11.3101
+     Angles 0 0 0
+     Prefab "{7DB6FF42A0A34F78}Prefabs/Vehicles/C130J/Parts/C130J_GearDoor_3.et"
+    }
+    EntitySlotInfo C130J_Surface_0_0 {
+     Offset -17.5500 4.4174 0.6759
+     Angles 0 0 0
+     Prefab "{7DB6ECEA7BB6556F}Prefabs/Vehicles/C130J/Parts/C130J_Surface_0.et"
+    }
+    EntitySlotInfo C130J_Surface_1_0 {
+     Offset 17.5500 4.4174 0.6759
+     Angles 0 0 0
+     Prefab "{7DB6B766FF36F094}Prefabs/Vehicles/C130J/Parts/C130J_Surface_1.et"
+    }
+    EntitySlotInfo C130J_Surface_2_0 {
+     Offset -4.3020 4.2932 -13.2519
+     Angles 0 0 0
+     Prefab "{7DB6E7F0471B94C7}Prefabs/Vehicles/C130J/Parts/C130J_Surface_2.et"
+    }
+    EntitySlotInfo C130J_Surface_3_0 {
+     Offset 4.3020 4.2932 -13.2519
+     Angles 0 0 0
+     Prefab "{7DB61C60C2A6814A}Prefabs/Vehicles/C130J/Parts/C130J_Surface_3.et"
+    }
+    EntitySlotInfo C130J_Surface_4_0 {
+     Offset -4.0034 4.2223 -0.3283
+     Angles 0 0 0
+     Prefab "{7DB69668CC348743}Prefabs/Vehicles/C130J/Parts/C130J_Surface_4.et"
+    }
+    EntitySlotInfo C130J_Surface_5_0 {
+     Offset 4.0034 4.2223 -0.3283
+     Angles 0 0 0
+     Prefab "{7DB6573CE3EC2283}Prefabs/Vehicles/C130J/Parts/C130J_Surface_5.et"
+    }
+    EntitySlotInfo C130J_Surface_6_0 {
+     Offset -9.3143 4.5503 0.0000
+     Angles 0 0 0
+     Prefab "{7DB60BEBCDADF42E}Prefabs/Vehicles/C130J/Parts/C130J_Surface_6.et"
+    }
+    EntitySlotInfo C130J_Surface_7_0 {
+     Offset 9.3143 4.5503 0.0000
+     Angles 0 0 0
+     Prefab "{7DB688865107DFDB}Prefabs/Vehicles/C130J/Parts/C130J_Surface_7.et"
+    }
+    EntitySlotInfo C130J_Surface_8_0 {
+     Offset 0.0000 8.0089 -13.3279
+     Angles 0 0 0
+     Prefab "{7DB66A3415975A53}Prefabs/Vehicles/C130J/Parts/C130J_Surface_8.et"
+    }
+   }
+  }
+ }
+}
