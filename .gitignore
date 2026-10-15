@@ -1,0 +1,13 @@
+# Workbench-generated resource cache (rebuilt automatically)
+resourceDatabase.rdb
+
+# Workbench build/publish output
+/Packed/
+/temp/
+
+# Editor and OS clutter
+.vs/
+.vscode/
+Thumbs.db
+desktop.ini
+*.tmp

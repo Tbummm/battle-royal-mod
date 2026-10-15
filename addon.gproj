@@ -1,0 +1,8 @@
+GameProject {
+ ID "BattleRoyal"
+ GUID "6A9E59ADB2957767"
+ TITLE "Battle Royal"
+ Dependencies {
+  "58D0FB3206B6F859"
+ }
+}
