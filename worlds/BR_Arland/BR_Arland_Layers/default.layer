@@ -1,0 +1,82 @@
+BR_GameMode GameMode_BR1 : "{B515E8C9F5A9DF5E}Prefabs/GameModes/BR_GameMode.et" {
+ coords 840 6 1470
+ m_iMinPlayersToStart 1
+ m_iCountdownSeconds 10
+ m_vMapCenter 2000 0 2000
+}
+SCR_AIWorld SCR_AIWorld1 : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
+ coords 842 6 1470
+}
+PerceptionManager PerceptionManager1 : "{028DAEAD63E056BE}Prefabs/World/Game/PerceptionManager.et" {
+ coords 844 6 1470
+}
+RadioManagerEntity RadioManager1 : "{B8E09FAB91C4ECCD}Prefabs/Systems/Radio/RadioManager.et" {
+ coords 846 6 1470
+}
+ScriptedChatEntity ChatEntity1 : "{F69BC912AC8236F9}Prefabs/MP/ScriptedChatEntity.et" {
+ coords 848 6 1470
+}
+ItemPreviewManagerEntity ItemPreviewManager1 : "{9F18C476AB860F3B}Prefabs/World/Game/ItemPreviewManager.et" {
+ coords 850 6 1470
+}
+SCR_FactionManager FactionManager_FFA1 : "{A242612865F2A48E}Prefabs/MP/Managers/Factions/FactionManager_Base.et" {
+ coords 852 6 1470
+ Factions {
+  SCR_FreeForAllFaction "{56B491183BEFD56B}" : "{FD79075CFB4C9161}Configs/Factions/FreeForAll.conf" {
+   m_sGroupFlagsImageSet "{68D2847B0077E872}UI/Textures/DeployMenu/Loadout-BG/Loadout_BG_Custom.imageset"
+  }
+ }
+}
+SCR_LoadoutManager LoadoutManager_FFA1 : "{97EF4C1A41F63DDB}Prefabs/MP/Managers/Loadouts/LoadoutManager_USxUSSR.et" {
+ coords 854 6 1470
+ m_aPlayerLoadouts {
+  SCR_FactionPlayerLoadout "{56B2B461C34A570F}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B461C275B309}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B461C7495F41}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B461C047DCDA}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B4613C48D08E}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B46134D39388}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B461341EA370}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B4613FB900E5}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B4613DCD3341}" {
+   m_sAffiliatedFaction "FFA"
+  }
+  SCR_FactionPlayerLoadout "{56B2B4613581570A}" {
+   m_sAffiliatedFaction "FFA"
+  }
+ }
+}
+$grp SCR_SpawnPoint : "{E7F4D5562F48DDE4}Prefabs/MP/Spawning/SpawnPoint_Base.et" {
+ {
+  coords 834.6 6 1461.7
+  m_sFaction "FFA"
+ }
+ {
+  coords 838.6 6 1461.7
+  m_sFaction "FFA"
+ }
+ {
+  coords 834.6 6 1465.7
+  m_sFaction "FFA"
+ }
+ {
+  coords 830.6 6 1461.7
+  m_sFaction "FFA"
+ }
+}
