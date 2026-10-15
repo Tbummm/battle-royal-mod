@@ -13,4 +13,12 @@ modded class GMS_FreeFallComponent
 		if (gameMode && gameMode.GetAutoDeployHeight() > 0)
 			m_fAutoDeployHeight = gameMode.GetAutoDeployHeight();
 	}
+
+	//------------------------------------------------------------------------------------------------
+	//! True from free-fall entry until the canopy lands. Uses the replicated mode, so it is
+	//! correct on the server and on every client.
+	bool BR_IsInAir()
+	{
+		return m_bFreeFalling || m_iRplMode != GMS_MODE_NONE;
+	}
 }

@@ -30,6 +30,9 @@ class BR_GameMode : SCR_BaseGameMode
 	[Attribute("8", UIWidgets.Slider, "Seconds the winner message shows before the end screen", "0 60 1", category: "Battle Royale")]
 	protected int m_iEndScreenDelaySeconds;
 
+	[Attribute("1", UIWidgets.CheckBox, "At match start, delete everything players picked up during warmup (they keep their base uniform)", category: "Battle Royale")]
+	protected bool m_bClearWarmupGear;
+
 	[Attribute("0 0 0", UIWidgets.Coords, "Center of the playable area; the drop plane crosses near it", category: "Drop")]
 	protected vector m_vMapCenter;
 
@@ -264,14 +267,17 @@ class BR_GameMode : SCR_BaseGameMode
 		GetAliveTeams(teams);
 		m_iStartingTeams = teams.Count();
 
-		// Characters wait safely where they are while their owners ride the plane
+		// Characters wait safely in the warmup area while their owners ride the plane.
+		// The parachute rig is handed out at the moment of the jump, so it can't be dropped beforehand.
 		foreach (int playerId : players)
 		{
 			IEntity character = GetGame().GetPlayerManager().GetPlayerControlledEntity(playerId);
 			if (!character)
 				continue;
 
-			GiveParachuteRig(character);
+			if (m_bClearWarmupGear)
+				ClearWarmupGear(character);
+
 			SetDamageEnabled(character, false);
 		}
 
@@ -307,7 +313,32 @@ class BR_GameMode : SCR_BaseGameMode
 	}
 
 	//------------------------------------------------------------------------------------------------
-	//! Puts Grey Man's parachute rig in the character's backpack slot.
+	//! Deletes everything except the jacket, pants and boots, so warmup weapons and gear
+	//! don't carry into the match and the backpack slot is free for the parachute rig.
+	protected void ClearWarmupGear(notnull IEntity character)
+	{
+		SCR_InventoryStorageManagerComponent inventory = SCR_InventoryStorageManagerComponent.Cast(character.FindComponent(SCR_InventoryStorageManagerComponent));
+		SCR_CharacterInventoryStorageComponent storage = SCR_CharacterInventoryStorageComponent.Cast(character.FindComponent(SCR_CharacterInventoryStorageComponent));
+		if (!inventory || !storage)
+			return;
+
+		array<IEntity> keep = {};
+		keep.Insert(storage.GetClothFromArea(LoadoutJacketArea));
+		keep.Insert(storage.GetClothFromArea(LoadoutPantsArea));
+		keep.Insert(storage.GetClothFromArea(LoadoutBootsArea));
+
+		array<IEntity> items = {};
+		inventory.GetItems(items);
+		foreach (IEntity item : items)
+		{
+			// Items inside something already deleted are gone by the time we reach them
+			if (item && !keep.Contains(item))
+				inventory.TryDeleteItem(item);
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! Puts our parachute rig in the character's backpack slot.
 	protected void GiveParachuteRig(notnull IEntity character)
 	{
 		if (m_ParachuteRigPrefab.IsEmpty())
@@ -315,7 +346,7 @@ class BR_GameMode : SCR_BaseGameMode
 
 		SCR_InventoryStorageManagerComponent inventory = SCR_InventoryStorageManagerComponent.Cast(character.FindComponent(SCR_InventoryStorageManagerComponent));
 		if (!inventory || !inventory.TrySpawnPrefabToStorage(m_ParachuteRigPrefab, null, -1, EStoragePurpose.PURPOSE_LOADOUT_PROXY))
-			Print("[BR] Could not equip a parachute rig. Make sure the warmup loadout has no backpack.", LogLevel.WARNING);
+			Print("[BR] Could not equip a parachute rig; the backpack slot may be taken.", LogLevel.WARNING);
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -396,6 +427,7 @@ class BR_GameMode : SCR_BaseGameMode
 		float sideways = (m_Rng.RandFloat01() * 2 - 1) * EXIT_SIDE_SPREAD;
 		vector exitPosition = planeTransform[3] - planeTransform[2] * EXIT_BEHIND_DISTANCE + planeTransform[0] * sideways - vector.Up * EXIT_BELOW_DISTANCE;
 
+		GiveParachuteRig(character);
 		SetDamageEnabled(character, true);
 		SCR_Global.TeleportPlayer(playerId, exitPosition);
 
