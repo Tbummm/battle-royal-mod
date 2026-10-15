@@ -21,6 +21,7 @@ class BR_DropClient
 	protected float m_fCameraYaw;
 	protected float m_fCameraPitch = 15;
 	protected float m_fLastJumpRequest = -1000;
+	protected bool m_bJumpKeyHeld = true;	//!< Starts held so a press from before boarding doesn't count
 	protected int m_iHintShownForDrop;
 
 	//------------------------------------------------------------------------------------------------
@@ -111,6 +112,12 @@ class BR_DropClient
 		if (!m_Camera && !CreateCamera())
 			return;
 
+		// The character's camera keeps reclaiming the screen; take it back every frame
+		// (same approach as the game's own debug camera)
+		CameraManager cameraManager = GetGame().GetCameraManager();
+		if (cameraManager.CurrentCamera() != m_Camera)
+			cameraManager.SetCamera(m_Camera);
+
 		InputManager input = GetGame().GetInputManager();
 		m_fCameraYaw += (input.GetActionValue("CharacterAimRight") - input.GetActionValue("CharacterAimLeft")) * CAMERA_LOOK_SPEED;
 		m_fCameraPitch += (input.GetActionValue("CharacterAimDown") - input.GetActionValue("CharacterAimUp")) * CAMERA_LOOK_SPEED;
@@ -148,6 +155,7 @@ class BR_DropClient
 		m_PreviousCamera = cameraManager.CurrentCamera();
 		cameraManager.SetCamera(m_Camera);
 		m_fCameraYaw = 0;
+		Print("[BR] Drop camera active.", LogLevel.NORMAL);
 		return true;
 	}
 
@@ -176,7 +184,12 @@ class BR_DropClient
 			SCR_HintManagerComponent.ShowCustomHint("Press Jump to leave the plane. You will be pushed out at the end of the route.", "Drop", JUMP_HINT_SECONDS);
 		}
 
-		if (!GetGame().GetInputManager().GetActionTriggered("CharacterJump"))
+		// Read the raw key value and detect the press ourselves, as Grey Man's does for its ripcord;
+		// the jump action's trigger event is consumed by the character controller
+		bool jumpHeld = GetGame().GetInputManager().GetActionValue("CharacterJump") > 0.5;
+		bool jumpPressed = jumpHeld && !m_bJumpKeyHeld;
+		m_bJumpKeyHeld = jumpHeld;
+		if (!jumpPressed)
 			return;
 
 		// The server confirms by removing us from the aboard list; resend if that hasn't arrived yet
@@ -189,5 +202,6 @@ class BR_DropClient
 
 		m_fLastJumpRequest = elapsed;
 		playerController.BR_RequestJump();
+		Print("[BR] Jump requested.", LogLevel.NORMAL);
 	}
 }

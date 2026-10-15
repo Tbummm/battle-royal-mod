@@ -2,7 +2,6 @@ BR_GameMode GameMode_BR1 : "{B515E8C9F5A9DF5E}Prefabs/GameModes/BR_GameMode.et" 
  coords 840 6 1470
  m_iMinPlayersToStart 1
  m_iCountdownSeconds 10
- m_vMapCenter 2000 0 2000
 }
 SCR_AIWorld SCR_AIWorld1 : "{E0A05C76552E7F58}Prefabs/AI/SCR_AIWorld.et" {
  coords 842 6 1470

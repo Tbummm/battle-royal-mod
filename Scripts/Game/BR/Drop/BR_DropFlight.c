@@ -21,18 +21,40 @@ class BR_DropFlight
 
 	//------------------------------------------------------------------------------------------------
 	//! Random path at a fixed altitude, crossing near the given center from a random heading.
-	static BR_DropFlight CreateRandom(notnull RandomGenerator rng, vector center, float centerJitter, float length, float altitude, float speed)
+	//! The path is cut short where it would leave the area between boundsMin and boundsMax
+	//! (players can't be placed outside the terrain).
+	static BR_DropFlight CreateRandom(notnull RandomGenerator rng, vector center, float centerJitter, float length, float altitude, float speed, vector boundsMin, vector boundsMax)
 	{
 		float jitterAngle = rng.RandFloat01() * Math.PI2;
 		float jitterDistance = Math.Sqrt(rng.RandFloat01()) * centerJitter;
 		vector crossing = center + Vector(Math.Cos(jitterAngle) * jitterDistance, 0, Math.Sin(jitterAngle) * jitterDistance);
+		crossing[0] = Math.Clamp(crossing[0], boundsMin[0], boundsMax[0]);
+		crossing[2] = Math.Clamp(crossing[2], boundsMin[2], boundsMax[2]);
 		crossing[1] = altitude;
 
 		float heading = rng.RandFloat01() * Math.PI2;
 		vector direction = Vector(Math.Cos(heading), 0, Math.Sin(heading));
 		float halfLength = length * 0.5;
+		float forward = Math.Min(halfLength, DistanceToBounds(crossing, direction, boundsMin, boundsMax));
+		float backward = Math.Min(halfLength, DistanceToBounds(crossing, -direction, boundsMin, boundsMax));
 
-		return new BR_DropFlight(crossing - direction * halfLength, crossing + direction * halfLength, speed);
+		return new BR_DropFlight(crossing - direction * backward, crossing + direction * forward, speed);
+	}
+
+	//------------------------------------------------------------------------------------------------
+	//! How far from origin along a horizontal direction before leaving the box (X and Z only).
+	protected static float DistanceToBounds(vector origin, vector direction, vector boundsMin, vector boundsMax)
+	{
+		float distance = float.MAX;
+		for (int axis = 0; axis < 3; axis += 2)
+		{
+			if (direction[axis] > 0.0001)
+				distance = Math.Min(distance, (boundsMax[axis] - origin[axis]) / direction[axis]);
+			else if (direction[axis] < -0.0001)
+				distance = Math.Min(distance, (boundsMin[axis] - origin[axis]) / direction[axis]);
+		}
+
+		return Math.Max(0, distance);
 	}
 
 	//------------------------------------------------------------------------------------------------

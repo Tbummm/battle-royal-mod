@@ -33,7 +33,7 @@ class BR_GameMode : SCR_BaseGameMode
 	[Attribute("1", UIWidgets.CheckBox, "At match start, delete everything players picked up during warmup (they keep their base uniform)", category: "Battle Royale")]
 	protected bool m_bClearWarmupGear;
 
-	[Attribute("0 0 0", UIWidgets.Coords, "Center of the playable area; the drop plane crosses near it", category: "Drop")]
+	[Attribute("0 0 0", UIWidgets.Coords, "Center of the playable area; the drop plane crosses near it. Leave at 0 0 0 to use the middle of the terrain", category: "Drop")]
 	protected vector m_vMapCenter;
 
 	[Attribute("800", UIWidgets.Slider, "How far (m) the plane's route may pass from the map center", "0 5000 50", category: "Drop")]
@@ -66,6 +66,7 @@ class BR_GameMode : SCR_BaseGameMode
 	protected static const float EXIT_FORWARD_SPEED_FACTOR = 0.3;	//!< Share of the plane's speed a jumper keeps
 	protected static const int FREEFALL_ENGAGE_DELAY_MS = 1000;	//!< Let the teleport replicate before starting free-fall
 	protected static const int AUTO_EJECT_INTERVAL_MS = 250;
+	protected static const float DROP_BOUNDS_MARGIN = 150;		//!< Metres the route stays inside the terrain edge
 
 	[RplProp(onRplName: "OnMatchPhaseReplicated")]
 	protected BR_EMatchPhase m_eMatchPhase = BR_EMatchPhase.WARMUP;
@@ -361,7 +362,17 @@ class BR_GameMode : SCR_BaseGameMode
 	//! Picks a random route and puts every match player aboard.
 	protected void BeginDrop(notnull array<int> players)
 	{
-		BR_DropFlight flight = BR_DropFlight.CreateRandom(m_Rng, m_vMapCenter, m_fFlightCenterJitter, m_fFlightLength, m_fFlightAltitude, m_fFlightSpeed);
+		// Keep the route over the terrain: the game refuses to place players outside it
+		vector boundsMin, boundsMax;
+		GetGame().GetWorldEntity().GetTerrain(0, 0).GetTerrainBoundBox(boundsMin, boundsMax);
+		boundsMin = boundsMin + Vector(DROP_BOUNDS_MARGIN, 0, DROP_BOUNDS_MARGIN);
+		boundsMax = boundsMax - Vector(DROP_BOUNDS_MARGIN, 0, DROP_BOUNDS_MARGIN);
+
+		vector center = m_vMapCenter;
+		if (center == vector.Zero)
+			center = (boundsMin + boundsMax) * 0.5;
+
+		BR_DropFlight flight = BR_DropFlight.CreateRandom(m_Rng, center, m_fFlightCenterJitter, m_fFlightLength, m_fFlightAltitude, m_fFlightSpeed, boundsMin, boundsMax);
 		m_vDropStart = flight.GetStart();
 		m_vDropEnd = flight.GetEnd();
 		m_fDropSpeed = flight.GetSpeed();
@@ -429,7 +440,8 @@ class BR_GameMode : SCR_BaseGameMode
 
 		GiveParachuteRig(character);
 		SetDamageEnabled(character, true);
-		SCR_Global.TeleportPlayer(playerId, exitPosition);
+		if (!SCR_Global.TeleportPlayer(playerId, exitPosition))
+			Print(string.Format("[BR] Teleport to the plane failed for player %1 at %2 (outside the terrain?).", playerId, exitPosition), LogLevel.WARNING);
 
 		vector exitVelocity = planeTransform[2] * m_DropFlight.GetSpeed() * EXIT_FORWARD_SPEED_FACTOR;
 		GetGame().GetCallqueue().CallLater(EngageFreeFall, FREEFALL_ENGAGE_DELAY_MS, false, playerId, exitVelocity);
