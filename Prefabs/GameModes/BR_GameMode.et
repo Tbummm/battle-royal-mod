@@ -12,4 +12,6 @@ BR_GameMode : "{0F307326459A1395}Prefabs/MP/Modes/GameMode_Base.et" {
   }
  }
  m_bUseSpawnPreload 0
+ m_DropPlanePrefab "{5EAD6C022A2EE7ED}Prefabs/Drop/BR_DropPlane.et"
+ m_ParachuteRigPrefab "{8360C84D6030F444}Prefabs/Items/BR_ParachuteRig.et"
 }
